@@ -32,6 +32,25 @@ textarea {
   backdrop-filter: blur(18px);
 }
 
+.soft-panel {
+  border-color: rgba(185, 235, 255, 0.18);
+  box-shadow:
+    0 24px 70px rgba(2, 8, 26, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.growth-step {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid rgba(185, 235, 255, 0.14);
+  border-radius: 8px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(112, 245, 207, 0.06));
+  padding: 14px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
 .nav-pill,
 .primary-btn,
 .secondary-btn {
@@ -63,11 +82,11 @@ textarea {
 
 .primary-btn {
   border: 1px solid rgba(125, 225, 255, 0.42);
-  background: linear-gradient(135deg, #31c9ff, #8067ff);
+  background: linear-gradient(135deg, #3bd6ff, #7b70ff);
   padding: 12px 18px;
   font-weight: 700;
   color: white;
-  box-shadow: 0 16px 38px rgba(49, 201, 255, 0.22);
+  box-shadow: 0 16px 38px rgba(70, 213, 255, 0.2);
 }
 
 .secondary-btn {
@@ -128,11 +147,11 @@ textarea {
 
 .radar-scope {
   background:
-    repeating-radial-gradient(circle, rgba(125, 225, 255, 0.16) 0 1px, transparent 1px 46px),
-    conic-gradient(from 0deg, rgba(70, 213, 255, 0.32), transparent 30%, rgba(143, 107, 255, 0.22), transparent 70%);
+    repeating-radial-gradient(circle, rgba(185, 235, 255, 0.14) 0 1px, transparent 1px 46px),
+    conic-gradient(from 0deg, rgba(112, 245, 207, 0.24), transparent 30%, rgba(143, 107, 255, 0.18), transparent 70%);
   box-shadow:
-    inset 0 0 42px rgba(70, 213, 255, 0.18),
-    0 0 54px rgba(143, 107, 255, 0.16);
+    inset 0 0 42px rgba(112, 245, 207, 0.14),
+    0 0 54px rgba(143, 107, 255, 0.13);
 }
 
 .plane-float {

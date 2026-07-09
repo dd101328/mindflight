@@ -1,6 +1,6 @@
 # 飞颜心测
 
-AI驱动的飞行学员心理评估系统。项目基于 React + Tailwind CSS + Vite 构建，所有数据均在前端模拟，可直接部署到 Vercel。
+面向飞行学员的 AI 心理成长平台。项目基于 React + Tailwind CSS + Vite 构建，所有数据均在前端模拟，可直接部署到 Vercel。
 
 ## 本地运行
 

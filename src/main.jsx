@@ -26,10 +26,17 @@ import "./styles.css";
 
 const pages = [
   { id: "home", label: "首页", icon: Home },
-  { id: "face", label: "面部采集", icon: Camera },
-  { id: "survey", label: "心理问卷", icon: Brain },
-  { id: "report", label: "AI报告", icon: Radar },
-  { id: "booking", label: "预约咨询", icon: CalendarDays },
+  { id: "face", label: "每日打卡", icon: Camera },
+  { id: "survey", label: "心理测评", icon: Brain },
+  { id: "report", label: "成长报告", icon: Radar },
+  { id: "booking", label: "我的", icon: UserRound },
+];
+
+const growthFlow = [
+  { label: "每日状态打卡", icon: Camera },
+  { label: "心理测评", icon: Brain },
+  { label: "AI 综合分析", icon: Radar },
+  { label: "今日成长建议", icon: Sparkles },
 ];
 
 const dimensions = [
@@ -126,7 +133,8 @@ function App() {
 function BackgroundScene() {
   return (
     <div className="fixed inset-0 z-0 overflow-hidden">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_15%,rgba(70,213,255,0.22),transparent_30%),radial-gradient(circle_at_84%_12%,rgba(143,107,255,0.25),transparent_34%),linear-gradient(135deg,#07152f_0%,#102556_48%,#28175c_100%)]" />
+      <div className="absolute inset-0 bg-[linear-gradient(135deg,#07152f_0%,#102556_48%,#28175c_100%)]" />
+      <div className="absolute inset-0 bg-[linear-gradient(115deg,rgba(70,213,255,0.16)_0%,transparent_30%,transparent_66%,rgba(143,107,255,0.18)_100%)]" />
       <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.04)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.04)_1px,transparent_1px)] bg-[size:58px_58px] opacity-40" />
       <div className="absolute left-1/2 top-1/2 h-[680px] w-[680px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-cyan-300/10" />
       <div className="absolute left-1/2 top-1/2 h-[460px] w-[460px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-violet-300/10" />
@@ -180,44 +188,62 @@ function Nav({ activePage, setActivePage }) {
 function HomePage({ go, assessment }) {
   return (
     <div className="grid w-full items-center gap-8 lg:grid-cols-[1.05fr_0.95fr]">
-      <section className="space-y-8">
-        <div className="inline-flex items-center gap-2 rounded-full border border-cyan-200/20 bg-cyan-200/10 px-4 py-2 text-sm text-cyan-100">
+      <section className="space-y-7">
+        <div className="inline-flex items-center gap-2 rounded-full border border-cyan-100/20 bg-cyan-100/10 px-4 py-2 text-sm text-cyan-50">
           <Sparkles size={16} />
-          <span className="whitespace-nowrap">飞行学员心理状态智能筛查</span>
+          <span className="whitespace-nowrap">飞行学员心理成长陪伴</span>
         </div>
         <div className="space-y-5">
           <h1 className="text-balance text-5xl font-bold tracking-normal text-white sm:text-6xl lg:text-7xl">
             飞颜心测
           </h1>
           <p className="max-w-2xl text-xl leading-8 text-cyan-50/80 sm:text-2xl">
-            AI驱动的飞行学员心理评估系统
+            面向飞行学员的 AI 心理成长平台
           </p>
         </div>
+        <div className="grid gap-3 sm:grid-cols-4">
+          {growthFlow.map((step, index) => {
+            const Icon = step.icon;
+            return (
+              <div className="growth-step" key={step.label}>
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-cyan-100/[0.12] text-cyan-100">
+                  <Icon size={19} />
+                </span>
+                <div>
+                  <div className="text-xs text-cyan-100/60">0{index + 1}</div>
+                  <div className="mt-1 whitespace-nowrap text-sm font-semibold text-slate-50">
+                    {step.label}
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
         <div className="grid gap-3 sm:grid-cols-3">
-          <Metric label="微表情采集" value="15秒" />
+          <Metric label="每日状态打卡" value="3分钟" />
           <Metric label="心理维度" value="5项" />
-          <Metric label="评估输出" value={assessment.risk.label} />
+          <Metric label="成长状态" value={assessment.risk.label} />
         </div>
         <div className="flex flex-col gap-3 sm:flex-row">
           <button className="primary-btn" onClick={() => go("face")} type="button">
             <Camera size={19} />
-            <span>开始面部采集</span>
+            <span>开始今日打卡</span>
           </button>
           <button className="secondary-btn" onClick={() => go("survey")} type="button">
             <Brain size={19} />
-            <span>进入心理问卷</span>
+            <span>进入心理测评</span>
           </button>
         </div>
       </section>
 
-      <section className="glass relative min-h-[440px] overflow-hidden rounded-lg p-5 sm:p-7">
-        <div className="absolute inset-0 bg-[linear-gradient(140deg,rgba(70,213,255,0.12),transparent_42%,rgba(143,107,255,0.16))]" />
+      <section className="glass soft-panel relative min-h-[440px] overflow-hidden rounded-lg p-5 sm:p-7">
+        <div className="absolute inset-0 bg-[linear-gradient(140deg,rgba(112,245,207,0.10),transparent_42%,rgba(143,107,255,0.13))]" />
         <div className="relative flex h-full flex-col justify-between gap-8">
           <div className="flex items-center justify-between gap-4">
             <div>
-              <p className="text-sm text-cyan-100/70">AI Flight Mind Console</p>
+              <p className="text-sm text-cyan-100/70">AI Growth Companion</p>
               <h2 className="mt-2 text-2xl font-semibold tracking-normal">
-                航空心理态势面板
+                今日心理成长面板
               </h2>
             </div>
             <Activity className="text-cyan-200" size={34} />
@@ -226,7 +252,7 @@ function HomePage({ go, assessment }) {
             <Plane className="plane-float text-cyan-100 drop-shadow-[0_0_20px_rgba(70,213,255,0.8)]" size={72} />
           </div>
           <div className="grid gap-3 sm:grid-cols-3">
-            {["认知负荷", "情绪稳定", "睡眠恢复"].map((label, index) => (
+            {["状态觉察", "情绪复原", "睡眠节律"].map((label, index) => (
               <div className="rounded-lg border border-white/10 bg-white/[0.08] p-4" key={label}>
                 <div className="text-sm text-slate-300">{label}</div>
                 <div className="mt-2 h-2 overflow-hidden rounded-full bg-white/10">
@@ -273,7 +299,7 @@ function FacePage({ faceData, setFaceData, go }) {
 
   return (
     <div className="grid w-full gap-6 lg:grid-cols-[0.92fr_1.08fr]">
-      <Panel title="面部采集" eyebrow="Micro-expression Capture" icon={Camera}>
+      <Panel title="每日状态打卡" eyebrow="Daily Check-in" icon={Camera}>
         <label className="upload-zone" htmlFor="face-upload">
           {faceData?.image ? (
             <img alt="采集预览" className="h-full w-full object-cover" src={faceData.image} />
@@ -281,9 +307,9 @@ function FacePage({ faceData, setFaceData, go }) {
             <div className="flex flex-col items-center gap-4 text-center">
               <CloudUpload className="text-cyan-200" size={48} />
               <div>
-                <p className="text-lg font-semibold">上传飞行学员正面照片</p>
+                <p className="text-lg font-semibold">上传今日状态照片</p>
                 <p className="mt-2 text-sm text-slate-300">
-                  系统将在前端模拟完成微表情特征分析
+                  系统将在前端模拟完成今日状态识别
                 </p>
               </div>
             </div>
@@ -308,7 +334,7 @@ function FacePage({ faceData, setFaceData, go }) {
         </div>
       </Panel>
 
-      <Panel title="AI微表情分析" eyebrow="Simulated AI Analysis" icon={Sparkles}>
+      <Panel title="AI状态分析" eyebrow="Simulated AI Analysis" icon={Sparkles}>
         <div className="grid gap-4 sm:grid-cols-2">
           <Signal label="紧张指数" value={faceData?.tension ?? 41} tone="cyan" />
           <Signal label="疲劳迹象" value={faceData?.fatigue ?? 35} tone="violet" />
@@ -322,8 +348,8 @@ function FacePage({ faceData, setFaceData, go }) {
           </div>
           <p className="mt-3 leading-7 text-slate-200">
             {faceData
-              ? "检测到面部肌肉紧张、疲劳迹象与注意保持度的组合特征，已纳入综合风险模型。"
-              : "尚未上传照片，当前使用默认低波动样本进行页面预览。"}
+              ? "检测到紧张、疲劳与注意保持度的组合特征，已纳入今日成长分析。"
+              : "尚未上传照片，当前使用默认平稳样本进行页面预览。"}
           </p>
         </div>
       </Panel>
@@ -344,12 +370,12 @@ function SurveyPage({ answers, setAnswers, go }) {
             Psychological Survey
           </p>
           <h1 className="mt-2 text-3xl font-bold tracking-normal sm:text-4xl">
-            心理问卷
+            心理测评
           </h1>
         </div>
         <button className="primary-btn" onClick={() => go("report")} type="button">
           <Radar size={18} />
-          <span>生成AI评估报告</span>
+          <span>生成成长报告</span>
         </button>
       </div>
       <div className="grid gap-4 lg:grid-cols-2">
@@ -405,7 +431,7 @@ function SurveyPage({ answers, setAnswers, go }) {
 function ReportPage({ assessment, faceData, go }) {
   return (
     <div className="grid w-full gap-6 xl:grid-cols-[0.96fr_1.04fr]">
-      <Panel title="AI评估报告" eyebrow="Risk Assessment Report" icon={Radar}>
+      <Panel title="成长报告" eyebrow="AI Growth Report" icon={Radar}>
         <div className="grid gap-5 md:grid-cols-[0.9fr_1.1fr]">
           <div className="rounded-lg border border-white/10 bg-white/[0.08] p-4">
             <RadarChart scores={assessment.dimensionScores} />
@@ -415,7 +441,7 @@ function ReportPage({ assessment, faceData, go }) {
             <div className="rounded-lg border border-white/10 bg-white/[0.08] p-5">
               <h3 className="mb-3 flex items-center gap-2 text-lg font-semibold">
                 <Brain size={19} />
-                <span>AI分析总结</span>
+                <span>AI综合分析</span>
               </h3>
               <p className="leading-7 text-slate-200">{assessment.summary}</p>
             </div>
@@ -570,7 +596,7 @@ function buildAssessment(answers, faceData) {
     expressionRisk,
     totalRisk,
     risk,
-    summary: `综合问卷与微表情模拟结果，当前心理风险等级为${risk.label}。主要关注维度为${highest.label}，系统判断训练负荷、睡眠恢复和情绪调节仍需动态观察。`,
+    summary: `综合测评与每日状态模拟结果，当前成长状态为${risk.label}。主要关注维度为${highest.label}，系统判断训练负荷、睡眠恢复和情绪调节仍需动态观察。`,
     suggestions:
       risk.label === "高风险"
         ? [
