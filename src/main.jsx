@@ -3,17 +3,23 @@ import { createRoot } from "react-dom/client";
 import {
   Activity,
   ArrowRight,
+  Bell,
   Brain,
   CalendarDays,
   Camera,
   CheckCircle2,
+  ChevronRight,
   Clock,
   CloudUpload,
   Compass,
+  FileText,
   Gauge,
   Headphones,
   HeartPulse,
   Home,
+  Lightbulb,
+  Smile,
+  Sun,
   Moon,
   Plane,
   Radar,
@@ -105,12 +111,19 @@ function App() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
+  const isAppPage =
+    activePage === "home" ||
+    activePage === "face" ||
+    activePage === "survey" ||
+    activePage === "report" ||
+    activePage === "booking";
+
   return (
-    <main className="min-h-screen overflow-x-hidden bg-flight-ink text-slate-50">
-      <BackgroundScene />
-      <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-7xl flex-col px-4 py-4 sm:px-6 lg:px-8">
-        <Nav activePage={activePage} setActivePage={go} />
-        <section className="flex flex-1 items-stretch py-6 sm:py-8">
+    <main className={isAppPage ? "min-h-screen overflow-x-hidden bg-[#f5fbff] text-slate-950" : "min-h-screen overflow-x-hidden bg-flight-ink text-slate-50"}>
+      {!isAppPage && <BackgroundScene />}
+      <div className={isAppPage ? "relative z-10 mx-auto min-h-screen w-full max-w-[430px]" : "relative z-10 mx-auto flex min-h-screen w-full max-w-7xl flex-col px-4 py-4 sm:px-6 lg:px-8"}>
+        {!isAppPage && <Nav activePage={activePage} setActivePage={go} />}
+        <section className={isAppPage ? "min-h-screen" : "flex flex-1 items-stretch py-6 sm:py-8"}>
           {activePage === "home" && <HomePage go={go} assessment={assessment} />}
           {activePage === "face" && (
             <FacePage faceData={faceData} setFaceData={setFaceData} go={go} />
@@ -122,7 +135,7 @@ function App() {
             <ReportPage assessment={assessment} faceData={faceData} go={go} />
           )}
           {activePage === "booking" && (
-            <BookingPage booking={booking} setBooking={setBooking} />
+            <BookingPage go={go} />
           )}
         </section>
       </div>
@@ -187,89 +200,139 @@ function Nav({ activePage, setActivePage }) {
 
 function HomePage({ go, assessment }) {
   return (
-    <div className="grid w-full items-center gap-8 lg:grid-cols-[1.05fr_0.95fr]">
-      <section className="space-y-7">
-        <div className="inline-flex items-center gap-2 rounded-full border border-cyan-100/20 bg-cyan-100/10 px-4 py-2 text-sm text-cyan-50">
-          <Sparkles size={16} />
-          <span className="whitespace-nowrap">飞行学员心理成长陪伴</span>
+    <div className="home-shell">
+      <div className="home-sky" aria-hidden="true">
+        <Plane className="home-sky-plane" size={54} />
+        <div className="home-cloud home-cloud-one" />
+        <div className="home-cloud home-cloud-two" />
+      </div>
+
+      <header className="home-topbar">
+        <button className="home-brand" onClick={() => go("home")} type="button">
+          <span className="home-brand-icon">
+            <Plane size={23} />
+          </span>
+          <span>
+            <span className="home-brand-title">飞颜心测</span>
+            <span className="home-brand-subtitle">MindFlight</span>
+          </span>
+        </button>
+        <button className="home-bell" type="button" aria-label="通知">
+          <Bell size={23} />
+        </button>
+      </header>
+
+      <section className="home-greeting" aria-label="今日问候">
+        <h1>下午好，KK</h1>
+        <p>今天状态怎么样？</p>
+      </section>
+
+      <button className="checkin-hero" onClick={() => go("face")} type="button">
+        <span className="checkin-camera">
+          <Camera size={31} />
+        </span>
+        <span className="checkin-copy">
+          <strong>开始今日打卡</strong>
+          <small>花 15 秒记录此刻状态</small>
+        </span>
+        <span className="checkin-arrow">
+          <ChevronRight size={29} />
+        </span>
+      </button>
+
+      <section className="home-card status-card" aria-label="今日状态">
+        <div className="home-card-header">
+          <div className="home-card-title">
+            <span className="home-card-icon blue">
+              <HeartPulse size={22} />
+            </span>
+            <h2>今日状态</h2>
+          </div>
+          <button className="home-card-link" onClick={() => go("report")} type="button">
+            查看趋势
+            <ChevronRight size={17} />
+          </button>
         </div>
-        <div className="space-y-5">
-          <h1 className="text-balance text-5xl font-bold tracking-normal text-white sm:text-6xl lg:text-7xl">
-            飞颜心测
-          </h1>
-          <p className="max-w-2xl text-xl leading-8 text-cyan-50/80 sm:text-2xl">
-            面向飞行学员的 AI 心理成长平台
+        <div className="status-stats">
+          <div>
+            <span>最近记录</span>
+            <strong>昨天 21:40</strong>
+          </div>
+          <div className="status-divider" />
+          <div>
+            <span>连续打卡</span>
+            <strong>3 天</strong>
+          </div>
+        </div>
+        <p className="status-note">坚持记录，你正在稳步成长 💙</p>
+      </section>
+
+      <section className="home-card assessment-card" aria-label="今日推荐测评">
+        <div className="home-card-header">
+          <div className="home-card-title">
+            <span className="home-card-icon purple">
+              <Brain size={22} />
+            </span>
+            <h2>今日推荐测评</h2>
+          </div>
+          <button className="home-card-link" onClick={() => go("survey")} type="button">
+            更多测评
+            <ChevronRight size={17} />
+          </button>
+        </div>
+        <div className="assessment-inner">
+          <div>
+            <h3>训练压力状态测评</h3>
+            <p>了解近期训练压力水平与应对方式</p>
+          </div>
+          <div className="assessment-time">
+            <Clock size={17} />
+            <span>约 2 分钟</span>
+          </div>
+        </div>
+        <button className="assessment-button" onClick={() => go("survey")} type="button">
+          开始测评
+        </button>
+      </section>
+
+      <section className="home-card advice-card" aria-label="今日成长建议">
+        <div className="home-card-header">
+          <div className="home-card-title">
+            <span className="home-card-icon green">
+              <Lightbulb size={22} />
+            </span>
+            <h2>今日成长建议</h2>
+          </div>
+        </div>
+        <div className="advice-inner">
+          <Sparkles className="advice-quote" size={25} />
+          <p>
+            训练结束后，用 3 分钟记录一次做得好的地方，积累你的自信时刻。
           </p>
-        </div>
-        <div className="grid gap-3 sm:grid-cols-4">
-          {growthFlow.map((step, index) => {
-            const Icon = step.icon;
-            return (
-              <div className="growth-step" key={step.label}>
-                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-cyan-100/[0.12] text-cyan-100">
-                  <Icon size={19} />
-                </span>
-                <div>
-                  <div className="text-xs text-cyan-100/60">0{index + 1}</div>
-                  <div className="mt-1 whitespace-nowrap text-sm font-semibold text-slate-50">
-                    {step.label}
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-        <div className="grid gap-3 sm:grid-cols-3">
-          <Metric label="每日状态打卡" value="3分钟" />
-          <Metric label="心理维度" value="5项" />
-          <Metric label="成长状态" value={assessment.risk.label} />
-        </div>
-        <div className="flex flex-col gap-3 sm:flex-row">
-          <button className="primary-btn" onClick={() => go("face")} type="button">
-            <Camera size={19} />
-            <span>开始今日打卡</span>
-          </button>
-          <button className="secondary-btn" onClick={() => go("survey")} type="button">
-            <Brain size={19} />
-            <span>进入心理测评</span>
-          </button>
+          <Plane className="advice-plane" size={62} />
         </div>
       </section>
 
-      <section className="glass soft-panel relative min-h-[440px] overflow-hidden rounded-lg p-5 sm:p-7">
-        <div className="absolute inset-0 bg-[linear-gradient(140deg,rgba(112,245,207,0.10),transparent_42%,rgba(143,107,255,0.13))]" />
-        <div className="relative flex h-full flex-col justify-between gap-8">
-          <div className="flex items-center justify-between gap-4">
-            <div>
-              <p className="text-sm text-cyan-100/70">AI Growth Companion</p>
-              <h2 className="mt-2 text-2xl font-semibold tracking-normal">
-                今日心理成长面板
-              </h2>
-            </div>
-            <Activity className="text-cyan-200" size={34} />
-          </div>
-          <div className="radar-scope mx-auto flex aspect-square w-full max-w-[330px] items-center justify-center rounded-full">
-            <Plane className="plane-float text-cyan-100 drop-shadow-[0_0_20px_rgba(70,213,255,0.8)]" size={72} />
-          </div>
-          <div className="grid gap-3 sm:grid-cols-3">
-            {["状态觉察", "情绪复原", "睡眠节律"].map((label, index) => (
-              <div className="rounded-lg border border-white/10 bg-white/[0.08] p-4" key={label}>
-                <div className="text-sm text-slate-300">{label}</div>
-                <div className="mt-2 h-2 overflow-hidden rounded-full bg-white/10">
-                  <div
-                    className="h-full rounded-full bg-gradient-to-r from-cyan-300 to-violet-300"
-                    style={{ width: `${76 - index * 11}%` }}
-                  />
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <nav className="home-bottom-nav" aria-label="首页底部导航">
+        {pages.map((page) => {
+          const Icon = page.icon;
+          const active = page.id === "home";
+          return (
+            <button
+              className={active ? "bottom-nav-item active" : "bottom-nav-item"}
+              key={page.id}
+              onClick={() => go(page.id)}
+              type="button"
+            >
+              <Icon size={24} />
+              <span>{page.label === "成长报告" ? "成长" : page.label}</span>
+            </button>
+          );
+        })}
+      </nav>
     </div>
   );
 }
-
 function FacePage({ faceData, setFaceData, go }) {
   const [fileName, setFileName] = useState("");
 
@@ -298,22 +361,58 @@ function FacePage({ faceData, setFaceData, go }) {
   };
 
   return (
-    <div className="grid w-full gap-6 lg:grid-cols-[0.92fr_1.08fr]">
-      <Panel title="每日状态打卡" eyebrow="Daily Check-in" icon={Camera}>
-        <label className="upload-zone" htmlFor="face-upload">
+    <div className="home-shell checkin-page">
+      <div className="home-sky" aria-hidden="true">
+        <Plane className="daily-sky-plane" size={54} />
+        <div className="home-cloud home-cloud-one" />
+      </div>
+
+      <header className="home-topbar">
+        <button className="home-brand" onClick={() => go("home")} type="button">
+          <span className="home-brand-icon">
+            <Plane size={23} />
+          </span>
+          <span>
+            <span className="home-brand-title">飞颜心测</span>
+            <span className="home-brand-subtitle">MindFlight</span>
+          </span>
+        </button>
+        <button className="home-bell" type="button" aria-label="通知">
+          <Bell size={23} />
+        </button>
+      </header>
+
+      <section className="daily-hero" aria-label="每日状态打卡">
+        <h1>每日状态打卡</h1>
+        <p>花 15 秒，记录此刻的训练状态 💙</p>
+      </section>
+
+      <section className="daily-card photo-step" aria-label="今日状态">
+        <div className="daily-card-title">
+          <span className="daily-card-icon">
+            <HeartPulse size={22} />
+          </span>
+          <div>
+            <h2>今日状态</h2>
+            <p>用 15 秒记录此刻的训练状态</p>
+          </div>
+        </div>
+        <label className="capture-orb" htmlFor="face-upload">
           {faceData?.image ? (
-            <img alt="采集预览" className="h-full w-full object-cover" src={faceData.image} />
+            <img alt="今日状态预览" src={faceData.image} />
           ) : (
-            <div className="flex flex-col items-center gap-4 text-center">
-              <CloudUpload className="text-cyan-200" size={48} />
-              <div>
-                <p className="text-lg font-semibold">上传今日状态照片</p>
-                <p className="mt-2 text-sm text-slate-300">
-                  系统将在前端模拟完成今日状态识别
-                </p>
-              </div>
-            </div>
+            <span className="capture-silhouette">
+              <span className="capture-button">
+                <Camera size={35} />
+              </span>
+              <strong>开始拍摄</strong>
+              <small>预计 15 秒</small>
+            </span>
           )}
+          <span className="scan-corner scan-corner-tl" />
+          <span className="scan-corner scan-corner-tr" />
+          <span className="scan-corner scan-corner-bl" />
+          <span className="scan-corner scan-corner-br" />
           <input
             accept="image/*"
             className="sr-only"
@@ -322,245 +421,402 @@ function FacePage({ faceData, setFaceData, go }) {
             type="file"
           />
         </label>
-        <div className="mt-5 flex flex-col gap-3 sm:flex-row">
-          <label className="primary-btn cursor-pointer justify-center" htmlFor="face-upload">
-            <CloudUpload size={18} />
-            <span>{fileName ? "重新上传照片" : "选择照片"}</span>
-          </label>
-          <button className="secondary-btn" onClick={() => go("survey")} type="button">
-            <ArrowRight size={18} />
-            <span>继续填写问卷</span>
-          </button>
-        </div>
-      </Panel>
 
-      <Panel title="AI状态分析" eyebrow="Simulated AI Analysis" icon={Sparkles}>
-        <div className="grid gap-4 sm:grid-cols-2">
-          <Signal label="紧张指数" value={faceData?.tension ?? 41} tone="cyan" />
-          <Signal label="疲劳迹象" value={faceData?.fatigue ?? 35} tone="violet" />
-          <Signal label="注意保持" value={faceData?.attention ?? 76} tone="mint" />
-          <Signal label="表情稳定" value={faceData?.stability ?? 82} tone="blue" />
-        </div>
-        <div className="mt-6 rounded-lg border border-cyan-200/20 bg-cyan-200/[0.08] p-5">
-          <div className="flex items-center gap-3">
-            <ShieldCheck className="text-cyan-200" size={24} />
-            <h3 className="text-lg font-semibold">模拟结论</h3>
+        <p className="privacy-note">
+          <ShieldCheck size={16} />
+          照片仅用于本次状态识别，不会储存或用于其他用途
+        </p>
+      </section>
+
+      <section className="daily-card result-step" aria-label="分析结果">
+        <div className="result-main">
+          <div className="daily-card-title">
+            <span className="daily-card-icon chart">
+              <Activity size={22} />
+            </span>
+            <div>
+              <h2>分析结果</h2>
+              <p>{faceData ? "已完成拍摄，可查看你的状态反馈" : "完成分析后查看你的状态反馈"}</p>
+            </div>
           </div>
-          <p className="mt-3 leading-7 text-slate-200">
-            {faceData
-              ? "检测到紧张、疲劳与注意保持度的组合特征，已纳入今日成长分析。"
-              : "尚未上传照片，当前使用默认平稳样本进行页面预览。"}
-          </p>
         </div>
-      </Panel>
+        <div className="result-illustration">
+          <FileText size={54} />
+          <ShieldCheck className="result-lock" size={22} />
+        </div>
+        <button className="result-button" onClick={() => go("report")} type="button">
+          <span>查看最新分析结果</span>
+          <ChevronRight size={22} />
+        </button>
+      </section>
+
+      <nav className="home-bottom-nav" aria-label="底部导航">
+        {pages.map((page) => {
+          const Icon = page.icon;
+          const active = page.id === "face";
+          return (
+            <button
+              className={active ? "bottom-nav-item active" : "bottom-nav-item"}
+              key={page.id}
+              onClick={() => go(page.id)}
+              type="button"
+            >
+              <Icon size={24} />
+              <span>{page.label === "成长报告" ? "成长" : page.label}</span>
+            </button>
+          );
+        })}
+      </nav>
     </div>
   );
 }
 
-function SurveyPage({ answers, setAnswers, go }) {
-  const updateAnswer = (key, value) => {
-    setAnswers((current) => ({ ...current, [key]: Number(value) }));
-  };
+function SurveyPage({ go }) {
+  return (
+    <div className="home-shell survey-page survey-simple-page">
+      <div className="home-sky" aria-hidden="true">
+        <Plane className="survey-sky-plane" size={50} />
+        <div className="home-cloud home-cloud-one" />
+      </div>
+
+      <header className="home-topbar">
+        <button className="home-brand" onClick={() => go("home")} type="button">
+          <span className="home-brand-icon">
+            <Plane size={23} />
+          </span>
+          <span>
+            <span className="home-brand-title">飞颜心测</span>
+            <span className="home-brand-subtitle">MindFlight</span>
+          </span>
+        </button>
+        <button className="home-bell" type="button" aria-label="通知">
+          <Bell size={23} />
+        </button>
+      </header>
+
+      <section className="survey-hero" aria-label="心理测评">
+        <h1>心理测评</h1>
+      </section>
+
+      <section className="survey-simple-card recommended" aria-label="训练压力状态测评">
+        <div>
+          <h2>训练压力状态测评</h2>
+          <div className="simple-meta-row">
+            <span className="simple-star">⭐ 今日推荐</span>
+            <span className="simple-time">
+              <Clock size={16} />
+              约2分钟
+            </span>
+          </div>
+        </div>
+        <button className="simple-primary-button" onClick={() => go("report")} type="button">
+          开始测评
+        </button>
+      </section>
+
+      <section className="survey-simple-card recent" aria-label="最近完成">
+        <h2>最近完成</h2>
+        <div className="simple-record">
+          <div>
+            <strong>训练压力状态测评</strong>
+            <span>3天前</span>
+          </div>
+          <b>87分</b>
+        </div>
+      </section>
+
+      <section className="survey-simple-card note" aria-label="说明">
+        <h2>说明</h2>
+        <p>
+          测评结果仅用于帮助了解近期训练压力状态，<br />
+          不作为医学诊断依据。
+        </p>
+      </section>
+
+      <nav className="home-bottom-nav" aria-label="底部导航">
+        {pages.map((page) => {
+          const Icon = page.icon;
+          const active = page.id === "survey";
+          return (
+            <button
+              className={active ? "bottom-nav-item active" : "bottom-nav-item"}
+              key={page.id}
+              onClick={() => go(page.id)}
+              type="button"
+            >
+              <Icon size={24} />
+              <span>{page.label === "成长报告" ? "成长" : page.label}</span>
+            </button>
+          );
+        })}
+      </nav>
+    </div>
+  );
+}
+
+function ReportPage({ go }) {
+  const growthCards = [
+    {
+      title: "情绪状态",
+      level: "稳定",
+      desc: "情绪整体平稳，适合保持当前节奏。",
+      icon: Waves,
+      tone: "blue",
+    },
+    {
+      title: "压力水平",
+      level: "轻度压力",
+      desc: "训练压力可被觉察，建议安排短时放松。",
+      icon: Gauge,
+      tone: "amber",
+    },
+    {
+      title: "专注状态",
+      level: "良好",
+      desc: "注意力保持较好，可继续关注恢复质量。",
+      icon: Brain,
+      tone: "green",
+    },
+  ];
+
+  const actions = [
+    "训练前做 3 轮方形呼吸，把注意力拉回当下。",
+    "训练结束后记录一个做得好的细节，积累自信证据。",
+  ];
 
   return (
-    <div className="w-full space-y-6">
-      <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
-        <div>
-          <p className="text-sm uppercase tracking-[0.24em] text-cyan-100/60">
-            Psychological Survey
-          </p>
-          <h1 className="mt-2 text-3xl font-bold tracking-normal sm:text-4xl">
-            心理测评
-          </h1>
-        </div>
-        <button className="primary-btn" onClick={() => go("report")} type="button">
-          <Radar size={18} />
-          <span>生成成长报告</span>
-        </button>
+    <div className="home-shell report-page">
+      <div className="home-sky" aria-hidden="true">
+        <Plane className="report-sky-plane" size={52} />
+        <div className="home-cloud home-cloud-one" />
       </div>
-      <div className="grid gap-4 lg:grid-cols-2">
-        {dimensions.map((dimension) => {
-          const Icon = dimension.icon;
+
+      <header className="home-topbar">
+        <button className="home-brand" onClick={() => go("home")} type="button">
+          <span className="home-brand-icon">
+            <Plane size={23} />
+          </span>
+          <span>
+            <span className="home-brand-title">飞颜心测</span>
+            <span className="home-brand-subtitle">MindFlight</span>
+          </span>
+        </button>
+        <button className="home-bell" type="button" aria-label="通知">
+          <Bell size={23} />
+        </button>
+      </header>
+
+      <section className="report-hero" aria-label="今日成长报告">
+        <p>今日成长报告</p>
+        <h1>整体状态稳定</h1>
+      </section>
+
+      <section className="report-status-card" aria-label="综合状态">
+        <span className="report-status-icon">
+          <HeartPulse size={30} />
+        </span>
+        <div>
+          <h2>你正在稳步适应训练节奏</h2>
+          <p>今天的状态适合继续保持规律作息，并在训练前做一次简短稳定练习。</p>
+        </div>
+      </section>
+
+      <section className="report-grid" aria-label="状态概览">
+        {growthCards.map((item) => {
+          const Icon = item.icon;
           return (
-            <article className="glass rounded-lg p-5" key={dimension.id}>
-              <div className="mb-5 flex items-center gap-3">
-                <span className="flex h-11 w-11 items-center justify-center rounded-lg bg-white/10 text-cyan-100">
-                  <Icon size={22} />
-                </span>
-                <h2 className="text-xl font-semibold tracking-normal">{dimension.label}</h2>
-              </div>
-              <div className="space-y-5">
-                {dimension.questions.map((question, index) => {
-                  const key = `${dimension.id}-${index}`;
-                  return (
-                    <div key={key}>
-                      <div className="mb-3 flex items-center justify-between gap-3">
-                        <label className="text-sm leading-6 text-slate-100" htmlFor={key}>
-                          {question}
-                        </label>
-                        <span className="rounded-md bg-cyan-200/[0.12] px-3 py-1 text-sm text-cyan-100">
-                          {answers[key]}分
-                        </span>
-                      </div>
-                      <input
-                        className="range"
-                        id={key}
-                        max="5"
-                        min="1"
-                        onChange={(event) => updateAnswer(key, event.target.value)}
-                        step="1"
-                        type="range"
-                        value={answers[key]}
-                      />
-                      <div className="mt-2 flex justify-between text-xs text-slate-400">
-                        <span>很少</span>
-                        <span>明显</span>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
+            <article className={`report-mini-card ${item.tone}`} key={item.title}>
+              <span className="report-mini-icon">
+                <Icon size={22} />
+              </span>
+              <h2>{item.title}</h2>
+              <strong>{item.level}</strong>
+              <p>{item.desc}</p>
             </article>
           );
         })}
-      </div>
-    </div>
-  );
-}
+      </section>
 
-function ReportPage({ assessment, faceData, go }) {
-  return (
-    <div className="grid w-full gap-6 xl:grid-cols-[0.96fr_1.04fr]">
-      <Panel title="成长报告" eyebrow="AI Growth Report" icon={Radar}>
-        <div className="grid gap-5 md:grid-cols-[0.9fr_1.1fr]">
-          <div className="rounded-lg border border-white/10 bg-white/[0.08] p-4">
-            <RadarChart scores={assessment.dimensionScores} />
-          </div>
-          <div className="space-y-4">
-            <RiskBadge risk={assessment.risk} />
-            <div className="rounded-lg border border-white/10 bg-white/[0.08] p-5">
-              <h3 className="mb-3 flex items-center gap-2 text-lg font-semibold">
-                <Brain size={19} />
-                <span>AI综合分析</span>
-              </h3>
-              <p className="leading-7 text-slate-200">{assessment.summary}</p>
-            </div>
-          </div>
+      <section className="report-card ai-advice-card" aria-label="AI 今日建议">
+        <div className="report-card-title">
+          <span>
+            <Sparkles size={22} />
+          </span>
+          <h2>AI 今日建议</h2>
         </div>
-      </Panel>
+        <p>
+          今天不需要追求“完全不紧张”。把注意力放在可控动作上，允许自己带着一点压力完成训练。
+        </p>
+      </section>
 
-      <Panel title="心理建议" eyebrow="Personal Guidance" icon={Headphones}>
-        <div className="space-y-3">
-          {assessment.suggestions.map((item) => (
-            <div className="flex gap-3 rounded-lg border border-cyan-200/[0.12] bg-cyan-100/[0.08] p-4" key={item}>
-              <CheckCircle2 className="mt-0.5 shrink-0 text-flight-mint" size={20} />
-              <p className="leading-6 text-slate-100">{item}</p>
+      <section className="report-card action-card" aria-label="今日行动">
+        <div className="report-card-title">
+          <span>
+            <CheckCircle2 size={22} />
+          </span>
+          <h2>今日行动</h2>
+        </div>
+        <div className="action-list">
+          {actions.map((action, index) => (
+            <div className="action-item" key={action}>
+              <span>{index + 1}</span>
+              <p>{action}</p>
             </div>
           ))}
         </div>
-        <div className="mt-6 grid gap-3 sm:grid-cols-3">
-          <Metric label="问卷风险分" value={assessment.surveyRisk} />
-          <Metric label="表情风险分" value={faceData?.expressionRisk ?? 32} />
-          <Metric label="综合分" value={assessment.totalRisk} />
-        </div>
-        <button className="primary-btn mt-6 w-full justify-center" onClick={() => go("booking")} type="button">
-          <CalendarDays size={18} />
-          <span>预约心理咨询</span>
-        </button>
-      </Panel>
+      </section>
+
+      <button className="report-reset-button" onClick={() => go("face")} type="button">
+        <Camera size={20} />
+        <span>重新记录状态</span>
+      </button>
+
+      <nav className="home-bottom-nav" aria-label="底部导航">
+        {pages.map((page) => {
+          const Icon = page.icon;
+          const active = page.id === "report";
+          return (
+            <button
+              className={active ? "bottom-nav-item active" : "bottom-nav-item"}
+              key={page.id}
+              onClick={() => go(page.id)}
+              type="button"
+            >
+              <Icon size={24} />
+              <span>{page.label === "成长报告" ? "成长" : page.label}</span>
+            </button>
+          );
+        })}
+      </nav>
     </div>
   );
 }
 
-function BookingPage({ booking, setBooking }) {
-  const [submitted, setSubmitted] = useState(false);
-  const update = (field, value) => {
-    setBooking((current) => ({ ...current, [field]: value }));
-    setSubmitted(false);
-  };
+function BookingPage({ go }) {
+  const goals = [
+    { label: "连续打卡3天", done: true },
+    { label: "完成一次测评", done: false },
+    { label: "查看成长报告", done: false },
+  ];
+
+  const history = [
+    { title: "状态记录", desc: "今天 13:20", icon: Camera, page: "face" },
+    { title: "训练压力测评", desc: "3天前 · 87分", icon: Brain, page: "survey" },
+    { title: "成长报告", desc: "整体状态稳定", icon: Radar, page: "report" },
+  ];
 
   return (
-    <div className="mx-auto grid w-full max-w-5xl gap-6 lg:grid-cols-[0.9fr_1.1fr]">
-      <Panel title="预约咨询" eyebrow="Counseling Appointment" icon={CalendarDays}>
-        <form
-          className="space-y-4"
-          onSubmit={(event) => {
-            event.preventDefault();
-            setSubmitted(true);
-          }}
-        >
-          <Field label="学员姓名">
-            <input
-              className="input"
-              onChange={(event) => update("name", event.target.value)}
-              placeholder="请输入姓名"
-              value={booking.name}
-            />
-          </Field>
-          <Field label="咨询主题">
-            <select
-              className="input"
-              onChange={(event) => update("topic", event.target.value)}
-              value={booking.topic}
-            >
-              <option>训练压力疏导</option>
-              <option>考核焦虑管理</option>
-              <option>睡眠恢复计划</option>
-              <option>学习适应支持</option>
-              <option>情绪稳定训练</option>
-            </select>
-          </Field>
-          <div className="grid gap-4 sm:grid-cols-2">
-            <Field label="日期">
-              <input
-                className="input"
-                onChange={(event) => update("date", event.target.value)}
-                type="date"
-                value={booking.date}
-              />
-            </Field>
-            <Field label="时间">
-              <input
-                className="input"
-                onChange={(event) => update("time", event.target.value)}
-                type="time"
-                value={booking.time}
-              />
-            </Field>
-          </div>
-          <Field label="补充说明">
-            <textarea
-              className="input min-h-28 resize-none"
-              onChange={(event) => update("note", event.target.value)}
-              placeholder="可填写近期困扰、训练阶段或希望重点沟通的问题"
-              value={booking.note}
-            />
-          </Field>
-          <button className="primary-btn w-full justify-center" type="submit">
-            <Clock size={18} />
-            <span>确认预约</span>
-          </button>
-        </form>
-      </Panel>
-      <Panel title="预约确认" eyebrow="Local Simulation" icon={UserRound}>
-        <div className="space-y-4">
-          <BookingRow label="姓名" value={booking.name || "待填写"} />
-          <BookingRow label="主题" value={booking.topic} />
-          <BookingRow label="日期" value={booking.date || "待选择"} />
-          <BookingRow label="时间" value={booking.time || "待选择"} />
-          <div className="rounded-lg border border-white/10 bg-white/[0.08] p-5">
-            <p className="text-sm text-slate-300">咨询说明</p>
-            <p className="mt-2 leading-7 text-slate-100">
-              本页面仅进行前端模拟提交，不会上传任何个人信息。建议在正式系统中接入权限控制、加密存储与危机干预流程。
-            </p>
-          </div>
-          {submitted && (
-            <div className="rounded-lg border border-flight-mint/30 bg-flight-mint/[0.12] p-5 text-flight-mint">
-              预约已生成，本地模拟记录已更新。
-            </div>
-          )}
+    <div className="home-shell profile-page">
+      <div className="home-sky" aria-hidden="true">
+        <Plane className="profile-sky-plane" size={52} />
+        <div className="home-cloud home-cloud-one" />
+      </div>
+
+      <header className="home-topbar">
+        <button className="home-brand" onClick={() => go("home")} type="button">
+          <span className="home-brand-icon">
+            <Plane size={23} />
+          </span>
+          <span>
+            <span className="home-brand-title">飞颜心测</span>
+            <span className="home-brand-subtitle">MindFlight</span>
+          </span>
+        </button>
+        <button className="home-bell" type="button" aria-label="通知">
+          <Bell size={23} />
+        </button>
+      </header>
+
+      <section className="profile-card growth-data" aria-label="我的成长数据">
+        <div className="profile-card-title">
+          <span>
+            <Activity size={22} />
+          </span>
+          <h2>我的成长数据</h2>
         </div>
-      </Panel>
+        <div className="growth-data-grid">
+          <div>
+            <strong>15天</strong>
+            <span>连续打卡</span>
+          </div>
+          <div>
+            <strong>6次</strong>
+            <span>完成测评</span>
+          </div>
+        </div>
+      </section>
+
+      <section className="profile-card" aria-label="我的成长目标">
+        <div className="profile-card-title">
+          <span className="green">
+            <CheckCircle2 size={22} />
+          </span>
+          <h2>我的成长目标</h2>
+        </div>
+        <p className="goal-week">本周目标</p>
+        <div className="goal-list">
+          {goals.map((goal) => (
+            <div className={goal.done ? "goal-item done" : "goal-item"} key={goal.label}>
+              <span>
+                <CheckCircle2 size={17} />
+              </span>
+              <p>{goal.label}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="profile-card" aria-label="我的历史">
+        <div className="profile-card-title">
+          <span className="purple">
+            <FileText size={22} />
+          </span>
+          <h2>我的历史</h2>
+        </div>
+        <div className="history-list">
+          {history.map((item) => {
+            const Icon = item.icon;
+            return (
+              <button className="history-item" key={item.title} onClick={() => go(item.page)} type="button">
+                <span className="history-icon">
+                  <Icon size={20} />
+                </span>
+                <span className="history-copy">
+                  <strong>{item.title}</strong>
+                  <small>{item.desc}</small>
+                </span>
+                <ChevronRight size={19} />
+              </button>
+            );
+          })}
+        </div>
+      </section>
+
+      <button className="settings-button" type="button">
+        <span>
+          <UserRound size={21} />
+          设置
+        </span>
+        <ChevronRight size={20} />
+      </button>
+
+      <nav className="home-bottom-nav" aria-label="底部导航">
+        {pages.map((page) => {
+          const Icon = page.icon;
+          const active = page.id === "booking";
+          return (
+            <button
+              className={active ? "bottom-nav-item active" : "bottom-nav-item"}
+              key={page.id}
+              onClick={() => go(page.id)}
+              type="button"
+            >
+              <Icon size={24} />
+              <span>{page.label === "成长报告" ? "成长" : page.label}</span>
+            </button>
+          );
+        })}
+      </nav>
     </div>
   );
 }
